@@ -25,7 +25,7 @@ def init_db(engine):
 def pulse():
     return "Running", 200
 
-@app.route('/', methods = ['POST'])
+@app.route('/event/', methods = ['POST'])
 def add():
     with Session(engine) as session:
         try:
@@ -43,7 +43,7 @@ def add():
         session.close()
     return "Accepted", 201
 
-@app.route('/view/', methods = ['GET'])
+@app.route('/event/view/', methods = ['GET'])
 def view():
     data = request.json
     events = []
@@ -60,7 +60,7 @@ def view():
         session.close()
     return jsonify(events), 200
 
-@app.route('/search/<keyword>/', methods = ['GET'])
+@app.route('/event/search/<keyword>/', methods = ['GET'])
 def search(keyword):
     data = request.json
     events = []
@@ -90,7 +90,7 @@ def search(keyword):
     return jsonify(events), 200
         
 
-@app.route('/delete/', methods = ['DELETE'])
+@app.route('/event/delete/', methods = ['DELETE'])
 def delete():
     data = request.json
     with Session(engine) as session:

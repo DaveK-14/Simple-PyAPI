@@ -39,47 +39,47 @@ http://localhost:5000/pulse/
 
 Check that the application is running(GET)
 
-http://localhost:5000/                  
+http://localhost:5000/event/                  
 
 Send data to the application to create a new Event(POST)
 
-http://localhost:5000/view/             
+http://localhost:5000/event/view/             
 
 Accepts a JSON body containing an id field to display a single event by it's id(GET)
 
-http://localhost:5000/search/(keyword)/ 
+http://localhost:5000/event/search/(keyword)/ 
 
 Accepts a JSON body containing either a client, description, or creator field, depending on which is used as the "keyword". Will search partial matches of any, returning a batch of results(GET)
 
-http://localhost:5000/delete/           
+http://localhost:5000/event/delete/           
 
 Accepts a JSON body containing an id field to delete a particular event(DELETE)
 
 
 Finally, testing the endpoints. I have prepared several example scripts to run, shown below:
 
-curl -X POST http://localhost:5000/ -H 'Content-Type: application/json' -d '{"id":1,"client":"David Konopka","description":"Routine Check-in","createdBy":"Admin"}'
+curl -X POST http://localhost:5000/event/ -H 'Content-Type: application/json' -d '{"id":1,"client":"David Konopka","description":"Routine Check-in","createdBy":"Admin"}'
 
-curl -X POST http://localhost:5000/ -H 'Content-Type: application/json' -d '{"id":2,"client":"Bob Johnson","description":"Blood Work","createdBy":"Admin"}'
+curl -X POST http://localhost:5000/event/ -H 'Content-Type: application/json' -d '{"id":2,"client":"Bob Johnson","description":"Blood Work","createdBy":"Admin"}'
 
-curl -X POST http://localhost:5000/ -H 'Content-Type: application/json' -d '{"id":3,"client":"Alice Royce","description":"Routine Check-in","createdBy":"Admin"}'
+curl -X POST http://localhost:5000/event/ -H 'Content-Type: application/json' -d '{"id":3,"client":"Alice Royce","description":"Routine Check-in","createdBy":"Admin"}'
 
-curl -X GET http://localhost:5000/view/ -H 'Content-Type: application/json' -d '{"id":1}'
+curl -X GET http://localhost:5000/event/view/ -H 'Content-Type: application/json' -d '{"id":1}'
 
-curl -X GET http://localhost:5000/view/ -H 'Content-Type: application/json' -d '{"id":2}'
+curl -X GET http://localhost:5000/event/view/ -H 'Content-Type: application/json' -d '{"id":2}'
 
-curl -X GET http://localhost:5000/search/client/ -H 'Content-Type: application/json' -d '{"client":"Dav","description":"Blood","createdBy":"Admin"}'
+curl -X GET http://localhost:5000/event/search/client/ -H 'Content-Type: application/json' -d '{"client":"Dav","description":"Blood","createdBy":"Admin"}'
 
-curl -X GET http://localhost:5000/search/description/ -H 'Content-Type: application/json' -d '{"client":"Dav","description":"Blood","createdBy":"Admin"}'
+curl -X GET http://localhost:5000/event/search/description/ -H 'Content-Type: application/json' -d '{"client":"Dav","description":"Blood","createdBy":"Admin"}'
 
-curl -X GET http://localhost:5000/search/creator/ -H 'Content-Type: application/json' -d '{"client":"Dav","description":"Blood","createdBy":"Admin"}'
+curl -X GET http://localhost:5000/event/search/creator/ -H 'Content-Type: application/json' -d '{"client":"Dav","description":"Blood","createdBy":"Admin"}'
 
-curl -X DELETE http://localhost:5000/delete/ -H 'Content-Type: application/json' -d '{"id":2}'
+curl -X DELETE http://localhost:5000/event/delete/ -H 'Content-Type: application/json' -d '{"id":2}'
 
-curl -X GET http://localhost:5000/search/creator/ -H 'Content-Type: application/json' -d '{"client":"Dav","description":"Blood","createdBy":"Admin"}'
+curl -X GET http://localhost:5000/event/search/creator/ -H 'Content-Type: application/json' -d '{"client":"Dav","description":"Blood","createdBy":"Admin"}'
 
-curl -X DELETE http://localhost:5000/delete/ -H 'Content-Type: application/json' -d '{"id":1}'
+curl -X DELETE http://localhost:5000/event/delete/ -H 'Content-Type: application/json' -d '{"id":1}'
 
-curl -X DELETE http://localhost:5000/delete/ -H 'Content-Type: application/json' -d '{"id":3}'
+curl -X DELETE http://localhost:5000/event/delete/ -H 'Content-Type: application/json' -d '{"id":3}'
 
 These scripts will create several new events, search by ID, search by client, description, and creator, delete one event, and search by creator again to show it's deletion. Then delete the remaining events. Currently, the json body requires a createdBy field for new/searched events, however this was written on the assumption that an authenticated user would be passing along some identifying information that could take its place.
