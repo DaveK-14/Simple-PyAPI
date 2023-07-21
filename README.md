@@ -5,47 +5,72 @@ On a successful run, the API will either return a response with a JSON body deta
 Running the program:
 
 First, you will want to install requirements. I recommend starting with the creation of a virtual environment with:
+
 python -m venv env
 
 Then activate it with:
+
 ./env/Scripts/activate.bat
 
 With this done, you may install all requirements for the program. Simply run:
+
 python -m pip install -r requirements.txt
 
 Next is creating a mysql database. From your MySQL workbench, please create a new schema and give it any name you like. With this blank schema, we can create our .env file for storing database info. Add a file named .env in the same folder as main.py, and inside of it place variables for:
+
 user = ""
+
 password = ""
+
 location = ""
+
 port = ""
+
 dbName = ""
 
 Fill these variables with your database username, password, host ip(or localhost if running locally), port, and the name of the schema you just created respectively. These will be accessed by the program on startup to find our new schema and create our main table. Finally, we are ready to start the application. Simply run:
+
 python -m main
 
 you will see the program begin to run, and will be hosted on http://localhost:5000.
 The current endpoints are:
+
 http://localhost:5000/pulse/            Check that the application is running(GET)
+
 http://localhost:5000/                  Send data to the application to create a new Event(POST)
+
 http://localhost:5000/view/             Accepts a JSON body containing an id field to display a single event by it's id(GET)
+
 http://localhost:5000/search/<keyword>/ Accepts a JSON body containing either a client, description, or creator field, depending on which is used as the "keyword". 
                                         Will search partial matches of any, returning a batch of results(GET)
+
 http://localhost:5000/delete/           Accepts a JSON body containing an id field to delete a particular event(DELETE)
 
 
 Finally, testing the endpoints. I have prepared several example scripts to run, shown below:
 
 curl -X POST http://localhost:5000/ -H 'Content-Type: application/json' -d '{"id":1,"client":"David Konopka","description":"Routine Check-in","createdBy":"Admin"}'
+
 curl -X POST http://localhost:5000/ -H 'Content-Type: application/json' -d '{"id":2,"client":"Bob Johnson","description":"Blood Work","createdBy":"Admin"}'
+
 curl -X POST http://localhost:5000/ -H 'Content-Type: application/json' -d '{"id":3,"client":"Alice Royce","description":"Routine Check-in","createdBy":"Admin"}'
+
 curl -X GET http://localhost:5000/view/ -H 'Content-Type: application/json' -d '{"id":1}'
+
 curl -X GET http://localhost:5000/view/ -H 'Content-Type: application/json' -d '{"id":2}'
+
 curl -X GET http://localhost:5000/search/client/ -H 'Content-Type: application/json' -d '{"client":"Dav","description":"Blood","createdBy":"Admin"}'
+
 curl -X GET http://localhost:5000/search/description/ -H 'Content-Type: application/json' -d '{"client":"Dav","description":"Blood","createdBy":"Admin"}'
+
 curl -X GET http://localhost:5000/search/creator/ -H 'Content-Type: application/json' -d '{"client":"Dav","description":"Blood","createdBy":"Admin"}'
+
 curl -X DELETE http://localhost:5000/delete/ -H 'Content-Type: application/json' -d '{"id":2}'
+
 curl -X GET http://localhost:5000/search/creator/ -H 'Content-Type: application/json' -d '{"client":"Dav","description":"Blood","createdBy":"Admin"}'
+
 curl -X DELETE http://localhost:5000/delete/ -H 'Content-Type: application/json' -d '{"id":1}'
+
 curl -X DELETE http://localhost:5000/delete/ -H 'Content-Type: application/json' -d '{"id":3}'
 
 These scripts will create several new events, search by ID, search by client, description, and creator, delete one event, and search by creator again to show it's deletion. Then delete the remaining events. Currently, the json body requires a createdBy field for new/searched events, however this was written on the assumption that an authenticated user would be passing along some identifying information that could take its place.
